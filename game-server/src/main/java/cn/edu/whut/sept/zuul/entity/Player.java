@@ -22,4 +22,6 @@ public class Player {
     private List<String> place;
     private List<String> items;
     private int packWeight;
+//    用户体力
+    private int power;
 }

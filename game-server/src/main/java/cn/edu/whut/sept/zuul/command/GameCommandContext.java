@@ -18,6 +18,7 @@ public class GameCommandContext {
     public GameCommandContext() {
         commandMap.put("help", new HelpCommand());
         commandMap.put("quit", new QuitCommand());
+        commandMap.put("get", new GetCommand());
         commandMap.put("go", new GoCommand());
     }
 
