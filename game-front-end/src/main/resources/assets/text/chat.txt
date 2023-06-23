@@ -1,0 +1,5 @@
+p1.name=Server
+p1.image=server.png
+p1:Welcome to the World of Zuul!World of Zuul is a new, incredibly boring adventure game.
+p1:Type 'help' if you need help.You are outside the main entrance of the university.
+p1:Exits: east south west
