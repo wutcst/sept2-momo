@@ -91,11 +91,11 @@ public enum MongodbUtil {
      * @return
      */
     public MongoDatabase getDB(String dbName) {
-        if (dbName != null && !"".equals(dbName)) {
-            MongoDatabase database = mongoClient.getDatabase(dbName);
-            return database;
+        if (dbName == null || "".equals(dbName)) {
+            return null;
         }
-        return null;
+        MongoDatabase database = mongoClient.getDatabase(dbName);
+        return database;
     }
 
     /**
@@ -105,21 +105,24 @@ public enum MongodbUtil {
      * @return
      */
     public MongoCollection<Document> getCollection(String dbName, String collName) {
-        if (null == collName || "".equals(collName)) {
-            return null;
+        if (collName != null && !"".equals(collName)) {
+            if (dbName != null && !"".equals(dbName)) {
+                MongoCollection<Document> collection = mongoClient.getDatabase(dbName).getCollection(collName);
+                return collection;
+            }
         }
-        if (null == dbName || "".equals(dbName)) {
-            return null;
-        }
-        MongoCollection<Document> collection = mongoClient.getDatabase(dbName).getCollection(collName);
-        return collection;
+        return null;
     }
 
     /**
      * 查询DB下的所有表名
      */
     public List<String> getAllCollections(String dbName) {
-        MongoIterable<String> colls = getDB(dbName).listCollectionNames();
+        MongoDatabase database = getDB(dbName);
+        if (database == null) {
+            return null;
+        }
+        MongoIterable<String> colls = database.listCollectionNames();
         List<String> _list = new ArrayList<String>();
         for (String s : colls) {
             _list.add(s);
@@ -133,10 +136,9 @@ public enum MongodbUtil {
      * @return
      */
     public MongoIterable<String> getAllDBNames() {
-        MongoIterable<String> s = mongoClient.listDatabaseNames();
-        return s;
+        MongoIterable<String> dbNames = mongoClient.listDatabaseNames();
+        return dbNames;
     }
-
     /**
      * 删除一个数据库
      */
@@ -152,10 +154,10 @@ public enum MongodbUtil {
      * @return
      */
     public Document findById(MongoCollection<Document> coll, String id) {
-        ObjectId _idobj = null;
+        ObjectId _idobj;
         try {
             _idobj = new ObjectId(id);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             return null;
         }
         return coll.find(Filters.eq("_id", _idobj)).first();
@@ -165,16 +167,18 @@ public enum MongodbUtil {
      * 统计数
      */
     public int getCount(MongoCollection<Document> coll) {
-        int count = (int) coll.count();
-        return count;
+        long count = coll.countDocuments();
+        return (int) count;
     }
 
     /**
      * 插入文档
      */
     public void insertOne(String dbName, String collName, Document doc) {
-        MongoDatabase db = getDB(dbName);
-        db.getCollection(collName).insertOne(doc);
+        MongoCollection<Document> collection = getCollection(dbName, collName);
+        if (collection != null) {
+            collection.insertOne(doc);
+        }
     }
 
     /**
@@ -201,10 +205,10 @@ public enum MongodbUtil {
      */
     public int deleteById(MongoCollection<Document> coll, String id) {
         int count = 0;
-        ObjectId _id = null;
+        ObjectId _id;
         try {
             _id = new ObjectId(id);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             return 0;
         }
         Bson filter = Filters.eq("_id", _id);
@@ -220,14 +224,13 @@ public enum MongodbUtil {
      * @return
      */
     public Document updateById(MongoCollection<Document> coll, String id, Document newdoc) {
-        ObjectId _idobj = null;
+        ObjectId _idobj;
         try {
             _idobj = new ObjectId(id);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             return null;
         }
         Bson filter = Filters.eq("_id", _idobj);
-        // coll.replaceOne(filter, newdoc); // 完全替代
         coll.updateOne(filter, new Document("$set", newdoc));
         return newdoc;
     }

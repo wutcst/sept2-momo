@@ -14,7 +14,7 @@ import cn.edu.whut.sept.zuul.Game;
 public class GoCommand implements GameCommand {
 
     @Override
-    public void execute() {
+    public void execute(Game game) {
         System.out.println("执行 go 命令");
 
         // 模拟移动到不同房间的逻辑
