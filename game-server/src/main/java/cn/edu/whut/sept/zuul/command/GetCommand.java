@@ -4,8 +4,9 @@ import cn.edu.whut.sept.zuul.Game;
 
 import java.util.Random;
 
-public class GetCommand {
-    public void execute() {
+public class GetCommand implements GameCommand{
+    @Override
+    public void execute(Game game) {
         System.out.println("执行 get 命令");
 
         // 模拟获取物品的逻辑
