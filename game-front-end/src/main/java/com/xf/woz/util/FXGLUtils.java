@@ -81,6 +81,8 @@ public class FXGLUtils {
         LookOnMessage.me().request(FXGLUtils.theater);
         LookOnMessage.me().request(FXGLUtils.lab);
 
+
+
     }
 
     public static void updateRoom(String roomName) {
