@@ -9,7 +9,6 @@
  */
 package com.xf.woz.client;
 
-
 import com.iohao.game.action.skeleton.core.DataCodecKit;
 import com.iohao.game.bolt.broker.client.external.bootstrap.ExternalKit;
 import com.iohao.game.bolt.broker.client.external.bootstrap.message.ExternalMessage;
@@ -38,9 +37,7 @@ public class ConnectWebsocket extends WebSocketClient {
         ConnectVerify connectReq = new ConnectVerify();
         connectReq.setMsg(NetworkKit.LOCAL_IP);
 
-        ExternalMessage externalMessage = ExternalKit
-                // 路由、子路由、业务数据
-                .createExternalMessage(cmd, subCmd, connectReq);
+        ExternalMessage externalMessage = ExternalKit.createExternalMessage(cmd, subCmd, connectReq);
 
         // 转为 pb 字节
         byte[] bytes = DataCodecKit.encode(externalMessage);
@@ -50,7 +47,7 @@ public class ConnectWebsocket extends WebSocketClient {
 
     @Override
     public void onMessage(String s) {
-        System.out.println("CommentWebSocketClient.onMessage");
+        System.out.println("ConnectWebsocket.onMessage");
     }
 
     @Override
@@ -68,11 +65,11 @@ public class ConnectWebsocket extends WebSocketClient {
 
     @Override
     public void onClose(int i, String s, boolean b) {
-        System.out.println("CommentWebSocketClient.onClose");
+        System.out.println("ConnectWebsocket.onClose");
     }
 
     @Override
     public void onError(Exception e) {
-        System.out.println("CommentWebSocketClient.onError");
+        System.out.println("ConnectWebsocket.onError");
     }
 }
