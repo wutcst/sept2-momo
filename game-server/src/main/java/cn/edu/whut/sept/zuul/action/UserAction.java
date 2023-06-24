@@ -59,7 +59,6 @@ public class UserAction {
         long userId = RandomKit.randomInt(1400000, 1500000);
         // channel 中设置用户的真实 userId；
         boolean success = UserIdSettingKit.settingUserId(flowContext, userId);
-//        GameServer.nowPlay.put(Math.toIntExact(userId),player);
         if (!success) {
             log.error("设置用户 userId 失败");
         }
@@ -70,7 +69,7 @@ public class UserAction {
     public RoomProtoBuf getRoomItem(RoomProtoBuf roomProtoBuf, FlowContext flowContext) {
         String roomName = roomProtoBuf.getName();
         MongoCollection<Document> rooms = MongodbUtil.instance.getCollection("woz", "room");
-        //从players中查找用户名为name的文档
+        //从rooms中查找房间名为roomName的文档
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("name", roomName);
         Document roomDoc = rooms.find(whereQuery).first();

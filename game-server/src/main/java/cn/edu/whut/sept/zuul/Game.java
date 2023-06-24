@@ -112,11 +112,11 @@ public class Game {
         } else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
-        // else command not recognised.
+        // else command not recognized.
         return wantToQuit;
     }
 
-    // implementations of user commands:
+    // Implementations of user commands:
 
     /**
      * 执行help指令，在终端打印游戏帮助信息. 此处会输出游戏中用户可以输入的命令列表
