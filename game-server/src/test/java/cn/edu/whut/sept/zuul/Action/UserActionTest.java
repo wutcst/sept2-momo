@@ -14,7 +14,161 @@ import cn.edu.whut.sept.zuul.entity.Player;
 import cn.edu.whut.sept.zuul.protoBuf.RoomProtoBuf;
 import org.junit.Test;
 
-import java.util.Objects;
+import java.util.Objectublic class UserActionTest {
+    @Test
+    public void updatePlayerTest() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.updatePlayer(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+
+    }
+
+    @Test
+    public void playerLogintest1() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.login(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+    }ublic class UserActionTest {
+    @Test
+    public void updatePlayerTest() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.updatePlayer(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+
+    }
+
+    @Test
+    public void playerLogintest1() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.login(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+    }ublic class UserActionTest {
+    @Test
+    public void updatePlayerTest() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.updatePlayer(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+
+    }
+
+    @Test
+    public void playerLogintest1() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.login(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+    }ublic class UserActionTest {
+    @Test
+    public void updatePlayerTest() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.updatePlayer(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+
+    }
+
+    @Test
+    public void playerLogintest1() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.login(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+    }ublic class UserActionTest {
+    @Test
+    public void updatePlayerTest() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.updatePlayer(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+
+    }
+
+    @Test
+    public void playerLogintest1() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.login(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+    }ublic class UserActionTest {
+    @Test
+    public void updatePlayerTest() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.updatePlayer(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+
+    }
+
+    @Test
+    public void playerLogintest1() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.login(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+    }ublic class UserActionTest {
+    @Test
+    public void updatePlayerTest() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.updatePlayer(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+
+    }
+
+    @Test
+    public void playerLogintest1() {
+        UserAction userAction = new UserAction();
+        Player player = new Player();
+        player.setPwd("123456");
+        player.setName("jack");
+        Player player1 = userAction.login(player, null);
+        assert Objects.equals(player1.getName(), player.getName());
+        assert Objects.equals(player1.getItems(), player.getItems());
+    }s;
 
 public class UserActionTest {
     @Test
