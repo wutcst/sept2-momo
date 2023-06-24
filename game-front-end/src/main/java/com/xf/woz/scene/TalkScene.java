@@ -20,10 +20,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class TalkScene extends SubScene {
-    //对话的数组
+    //对话的列表
     private final List<Talk> list = new ArrayList<>();
     //text的文本
     private final Text text;
@@ -32,11 +33,11 @@ public class TalkScene extends SubScene {
     //存放text和包裹的矩形的容器
     private StackPane stackPane;
     //左边的立绘
-    private final ImageView serverImg;
+    private final ImageView speakerImg;
 
     private static TalkScene instance = new TalkScene();
 
-    //简单的单例模式 方便调用
+    //单例模式，方便调用
     public static synchronized TalkScene getInstance() {
         if (instance == null) {
             instance = new TalkScene();
@@ -44,11 +45,10 @@ public class TalkScene extends SubScene {
         return instance;
     }
 
-
     private TalkScene() {
         double width = FXGL.getAppWidth();
         double height = FXGL.getAppHeight() / 4d;
-        //初始化ui的框体图片
+        //初始化UI框体图片
         Image image = new Image("assets/textures/ui/talkScene.png");
         ImageView imageView = new ImageView(image);
         //保持长宽比
@@ -58,15 +58,15 @@ public class TalkScene extends SubScene {
         imageView.setTranslateY(height * 3 + 30);
 
         //初始化立绘的位置
-        serverImg = new ImageView();
-        serverImg.setPreserveRatio(true);
-        serverImg.setFitWidth(width / 3d);
-        serverImg.setTranslateX(20);
-        serverImg.setTranslateY(height * 2.5);
+        speakerImg = new ImageView();
+        speakerImg.setPreserveRatio(true);
+        speakerImg.setFitWidth(width / 3d);
+        speakerImg.setTranslateX(20);
+        speakerImg.setTranslateY(height * 2.5);
 
-        //初始化text文本
+        //初始化文本框
         text = FXGL.getUIFactoryService().newText("", Color.PINK, FontType.GAME, 22);
-        text.visibleProperty().set(true);
+        text.setVisible(true);
         text.setFill(new LinearGradient(0, 0, 1, 2, true, CycleMethod.REPEAT, new Stop(0, Color.AQUA), new Stop(0.5f, Color.RED)));
         text.setStrokeWidth(1);
         text.setStroke(Color.PINK);
@@ -77,70 +77,63 @@ public class TalkScene extends SubScene {
         rectangle.setTranslateX(0);
         rectangle.setTranslateY(height * 3);
 
-        //把矩形透明度调低
+        //将矩形透明度调低
         rectangle.setOpacity(0);
         getContentRoot().getChildren().add(imageView);
-        //添加一个input事件 鼠标左进一步对话
+        //添加一个输入事件，当鼠标左键点击时进行下一条对话
         getInput().addAction(new UserAction("remove") {
             @Override
             protected void onActionBegin() {
                 getContentRoot().getChildren().remove(stackPane);
-                getContentRoot().getChildren().remove(serverImg);
+                getContentRoot().getChildren().remove(speakerImg);
                 nextTalk();
             }
         }, MouseButton.PRIMARY);
     }
 
-
     //展示对话框的方法
     public synchronized void show(List<Talk> talkList) {
         FXGL.getSceneService().pushSubScene(this);
-        ArrayList<Talk> arrayList = new ArrayList<>(talkList);
-        arrayList.forEach(t -> {
-            int length = t.getText().length();
+        //对话内容拆分成多条，每条最多显示100个字符
+        for (Talk talk : talkList) {
+            String message = talk.getText();
+            int length = message.length();
             if (length > 100) {
                 for (int i = 0; i < length / 100; i++) {
-                    String substring = t.getText().substring(0, Math.min(t.getText().length(), 100));
-                    Talk talk = new Talk();
-                    talk.setText(substring);
-                    talk.setAddressorImg(t.getAddressorImg());
-                    list.add(talk);
-                    if (t.getText().length() > 100) {
-                        t.setText(t.getText().substring(100, t.getText().length() - 100));
-                    } else {
-                        list.add(t);
-                        break;
-                    }
+                    String substring = message.substring(0, Math.min(message.length(), 100));
+                    Talk subTalk = new Talk(substring, talk.getAddressorImg());
+                    list.add(subTalk);
+                    message = message.substring(100);
                 }
-            } else {
-                list.add(t);
             }
-        });
+            if (!message.isEmpty()) {
+                Talk remainingTalk = new Talk(message, talk.getAddressorImg());
+                list.add(remainingTalk);
+            }
+        }
         nextTalk();
     }
 
     public void nextTalk() {
-        if (list.size() < 1) {
+        if (list.isEmpty()) {
             getInput().clearAll();
             FXGL.getSceneService().popSubScene();
         } else {
-            Talk s = list.get(0);
-            list.remove(s);
-            showTalk(s);
+            Talk talk = list.remove(0);
+            showTalk(talk);
         }
     }
 
     /**
-     * 展示文字
+     * 展示对话内容
      */
     private void showTalk(Talk talk) {
         text.setText(talk.getText());
         StackPane stackPane = new StackPane(rectangle, text);
         this.stackPane = stackPane;
 
-        serverImg.setImage(new Image(talk.getAddressorImg()));
-        getContentRoot().getChildren().add(serverImg);
+        speakerImg.setImage(new Image(talk.getAddressorImg()));
+        getContentRoot().getChildren().add(speakerImg);
         getContentRoot().getChildren().add(stackPane);
     }
-
 }

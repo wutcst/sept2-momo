@@ -18,75 +18,70 @@ import com.xf.woz.entity.RoomEntityType;
 import java.util.Map;
 
 public class RoomFactory implements EntityFactory {
+
     @Spawns("outside")
-    public Entity getOutside() {
+    public Entity spawnOutside() {
         return FXGL.entityBuilder()
                 .view("room/outside.png")
                 .build();
     }
 
     @Spawns("pub")
-    public Entity getPub() {
+    public Entity spawnPub() {
         return FXGL.entityBuilder()
                 .view("room/pub.png")
                 .build();
     }
 
     @Spawns("theater")
-    public Entity getTheater() {
+    public Entity spawnTheater() {
         return FXGL.entityBuilder()
                 .view("room/theater.png")
                 .build();
     }
 
     @Spawns("lab")
-    public Entity getLab() {
+    public Entity spawnLab() {
         return FXGL.entityBuilder()
                 .view("room/lab.png")
                 .build();
     }
 
     @Spawns("office")
-    public Entity getOffice() {
+    public Entity spawnOffice() {
         return FXGL.entityBuilder()
                 .view("room/office.png")
                 .build();
     }
 
-    public static Map<String,RoomEntityType> roomMap = Map.of(
-            "outside",RoomEntityType.OUTSIDE,
-            "pub",RoomEntityType.PUB,
-            "theater",RoomEntityType.THEATER,
-            "lab",RoomEntityType.LAB,
-            "office",RoomEntityType.OFFICE,
-            "magic",RoomEntityType.MAGIC
+    public static Map<String, RoomEntityType> roomMap = Map.of(
+            "outside", RoomEntityType.OUTSIDE,
+            "pub", RoomEntityType.PUB,
+            "theater", RoomEntityType.THEATER,
+            "lab", RoomEntityType.LAB,
+            "office", RoomEntityType.OFFICE,
+            "magic", RoomEntityType.MAGIC
     );
 
     public static Entity createEntity(RoomEntityType type) {
         switch (type) {
             case OUTSIDE -> {
-                Entity entity = FXGL.entityBuilder().view("room/outside.png").build();
-                return entity;
+                return FXGL.entityBuilder().view("room/outside.png").build();
             }
             case PUB -> {
-                Entity entity = FXGL.entityBuilder().view("room/pub.png").build();
-                return entity;
+                return FXGL.entityBuilder().view("room/pub.png").build();
             }
             case THEATER -> {
-                Entity entity = FXGL.entityBuilder().view("room/theater.png").build();
-                return entity;
+                return FXGL.entityBuilder().view("room/theater.png").build();
             }
             case LAB -> {
-                Entity entity = FXGL.entityBuilder().view("room/lab.png").build();
-                return entity;
+                return FXGL.entityBuilder().view("room/lab.png").build();
             }
             case OFFICE -> {
-                Entity entity = FXGL.entityBuilder().view("room/office.png").build();
-                return entity;
+                return FXGL.entityBuilder().view("room/office.png").build();
             }
             case MAGIC -> {
-                Entity entity = FXGL.entityBuilder().view("room/magic.png").build();
-                return entity;
+                return FXGL.entityBuilder().view("room/magic.png").build();
             }
             default -> {
                 return null;
