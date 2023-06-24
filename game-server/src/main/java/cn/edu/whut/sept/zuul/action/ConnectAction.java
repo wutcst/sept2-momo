@@ -26,20 +26,17 @@ import org.bson.Document;
 public class ConnectAction {
     @ActionMethod(0)
     public ConnectVerify connectVerify(ConnectVerify connectVerify) {
-        var newConnectVerify = new ConnectVerify();
-        newConnectVerify.setMsg("hello, serverIP:" + NetworkKit.LOCAL_IP);
+        ConnectVerify newConnectVerify = new ConnectVerify();
+        newConnectVerify.setMsg("hello, serverIP: " + NetworkKit.LOCAL_IP);
         return newConnectVerify;
     }
 
     @ActionMethod(2)
     public RoomProtoBuf updateAllRoom(RoomProtoBuf roomProtoBuf, FlowContext flowContext) {
-        //将player信息保存至数据库
         MongoCollection<Document> rooms = MongodbUtil.instance.getCollection("woz", "room");
-        //从players中查找用户名为name的文档
         BasicDBObject whereQuery = new BasicDBObject();
         whereQuery.put("name", roomProtoBuf.getName());
         rooms.findOneAndUpdate(whereQuery, new Document("$set", new Document("items", roomProtoBuf.getItems())));
-
         return roomProtoBuf;
     }
 }
