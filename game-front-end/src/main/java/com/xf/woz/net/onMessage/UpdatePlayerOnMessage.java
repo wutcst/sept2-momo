@@ -7,7 +7,7 @@
  * @updateTime : [2023-6-23 22:56]
  * @updateRemark : [说明本次修改内容]
  */
-package com.xf.woz.net.onmessage;
+package com.xf.woz.net.onMessage;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.iohao.game.action.skeleton.core.CmdKit;
@@ -15,6 +15,7 @@ import com.iohao.game.action.skeleton.core.DataCodecKit;
 import com.iohao.game.bolt.broker.client.external.bootstrap.message.ExternalMessage;
 import com.xf.woz.entityFactory.TalkFactory;
 import com.xf.woz.net.UserOnMessage;
+import com.xf.woz.net.onMessage.hallAndCmd.UserCmd;
 import com.xf.woz.pojo.Player;
 import com.xf.woz.scene.TalkScene;
 import javafx.util.Duration;
@@ -24,6 +25,8 @@ import java.util.List;
 
 @Slf4j
 public class UpdatePlayerOnMessage implements UserOnMessage {
+
+
     @Override
     public int getCmdMerge() {
         return CmdKit.merge(UserCmd.CMD, UserCmd.UPDATE);
@@ -45,9 +48,6 @@ public class UpdatePlayerOnMessage implements UserOnMessage {
         return Holder.ME;
     }
 
-    /**
-     * 通过 JVM 的类加载机制, 保证只加载一次 (singleton)
-     */
     private static class Holder {
         static final UpdatePlayerOnMessage ME = new UpdatePlayerOnMessage();
     }

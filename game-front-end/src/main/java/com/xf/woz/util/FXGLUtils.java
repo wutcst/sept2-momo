@@ -14,9 +14,9 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.xf.woz.entity.RoomEntityType;
 import com.xf.woz.entityFactory.RoomFactory;
 import com.xf.woz.entityFactory.TalkFactory;
-import com.xf.woz.net.onmessage.LookOnMessage;
-import com.xf.woz.net.onmessage.UpdateAllRoomOnMessage;
-import com.xf.woz.net.onmessage.UpdatePlayerOnMessage;
+import com.xf.woz.net.onMessage.LookOnMessage;
+import com.xf.woz.net.onMessage.UpdateAllRoomOnMessage;
+import com.xf.woz.net.onMessage.UpdatePlayerOnMessage;
 import com.xf.woz.pojo.Item;
 import com.xf.woz.pojo.Player;
 import com.xf.woz.pojo.Room;
@@ -85,35 +85,6 @@ public class FXGLUtils {
 
     }
 
-    public static void updateRoom(String roomName) {
-        Platform.runLater(() -> {
-            RoomEntityType roomType = RoomFactory.roomMap.get(roomName);
-            getGameWorld().addEntity(Objects.requireNonNull(RoomFactory.createEntity(roomType)));
-
-            if (roomType == RoomEntityType.MAGIC) {
-                List<String> magicRoomTalks = List.of("This is a magic room.", "You are teleported to a random room");
-                List<Talk> talks = TalkFactory.buildTalkList(magicRoomTalks);
-
-                runOnce(() -> {
-                    TalkScene.getInstance().show(talks);
-
-                    // 从枚举中随机获取一个房间类型
-                    Random random = new Random();
-                    RoomEntityType newRoomType = RoomEntityType.values()[random.nextInt(RoomEntityType.values().length)];
-                    updateRoom(newRoomType.name().toLowerCase(Locale.ROOT));
-                }, Duration.millis(1));
-            } else {
-                if (nowPlayer != null) {
-                    Room currentRoom = getCurrentRoom(roomName);
-                    if (currentRoom != null) {
-                        runOnce(() -> TalkScene.getInstance().show(TalkFactory.buildTalkList(List.of(currentRoom.getLongDescription()))), Duration.millis(1));
-                        nowPlayer.getPlace().add(roomName);
-                    }
-                }
-            }
-        });
-    }
-
 
     public static void backRoom() {
         List<String> place = nowPlayer.getPlace();
@@ -136,43 +107,6 @@ public class FXGLUtils {
         UpdatePlayerOnMessage.me().request(nowPlayer);
     }
 
-    public static void setItems(String name, List<String> items) {
-        Map<String, Integer> itemsCount = new HashMap<>();
-        for (String item : items) {
-            if (StrUtil.isNotBlank(item)) {
-                itemsCount.put(item, itemsCount.getOrDefault(item, 0) + 1);
-            }
-        }
-        roomItems.put(name, itemsCount);
-    }
-
-    public static void takeItem(String roomName, String itemName) throws NoSuchFieldException, IllegalAccessException {
-        String[] s = itemName.split(" ");
-        String temp = itemName;
-        if (s.length == 2) {
-            temp = s[0] + s[1].substring(0, 1).toUpperCase(Locale.ROOT) + s[1].substring(1);
-        }
-
-        Field oriRoom = FXGLUtils.class.getDeclaredField(temp);
-        oriRoom.setAccessible(true);
-        Item item = (Item) oriRoom.get(FXGLUtils.class);
-
-        int totalWeight = getLoad() + item.getWeight();
-        if (totalWeight > nowPlayer.getPackWeight()) {
-            FXGL.getNotificationService().pushNotification("Your backpack is full");
-            return;
-        }
-
-        Map<String, Integer> itemsCount = roomItems.get(roomName);
-        if (itemsCount != null) {
-            Integer count = itemsCount.get(itemName);
-            if (count != null) {
-                itemsCount.put(itemName, count - 1);
-            }
-        }
-
-        nowPlayer.getItems().add(itemName);
-    }
 
     public static int getLoad() {
         int load = 0;
@@ -217,6 +151,34 @@ public class FXGLUtils {
     }
 
 
+
+
+
+    public static void useMagicCookie() {
+        Player nowPlayer = FXGLUtils.nowPlayer;
+        String magicCookie = "magic cookie";
+
+        // 检查当前玩家是否拥有魔法饼干
+        if (nowPlayer.getItems().contains(magicCookie)) {
+            // 移除魔法饼干
+            nowPlayer.getItems().remove(magicCookie);
+
+            // 更新背包重量
+            nowPlayer.setPackWeight(nowPlayer.getPackWeight() + 1);
+
+            // 显示通知
+            FXGL.getNotificationService().pushNotification("You have used a magic cookie, your packweight + 1");
+        }
+    }
+    public static void setItems(String name, List<String> items) {
+        Map<String, Integer> itemsCount = new HashMap<>();
+        for (String item : items) {
+            if (StrUtil.isNotBlank(item)) {
+                itemsCount.put(item, itemsCount.getOrDefault(item, 0) + 1);
+            }
+        }
+        roomItems.put(name, itemsCount);
+    }
     public static void updateAllRoom() {
         String[] rooms = new String[]{"outside", "pub", "lab", "office", "theater"};
 
@@ -240,21 +202,59 @@ public class FXGLUtils {
         }
     }
 
+    public static void updateRoom(String roomName) {
+        Platform.runLater(() -> {
+            RoomEntityType roomType = RoomFactory.roomMap.get(roomName);
+            getGameWorld().addEntity(Objects.requireNonNull(RoomFactory.createEntity(roomType)));
 
-    public static void useMagicCookie() {
-        Player nowPlayer = FXGLUtils.nowPlayer;
-        String magicCookie = "magic cookie";
+            if (roomType == RoomEntityType.MAGIC) {
+                List<String> magicRoomTalks = List.of("This is a magic room.", "You are teleported to a random room");
+                List<Talk> talks = TalkFactory.buildTalkList(magicRoomTalks);
 
-        // 检查当前玩家是否拥有魔法饼干
-        if (nowPlayer.getItems().contains(magicCookie)) {
-            // 移除魔法饼干
-            nowPlayer.getItems().remove(magicCookie);
+                runOnce(() -> {
+                    TalkScene.getInstance().show(talks);
 
-            // 更新背包重量
-            nowPlayer.setPackWeight(nowPlayer.getPackWeight() + 1);
-
-            // 显示通知
-            FXGL.getNotificationService().pushNotification("You have used a magic cookie, your packweight + 1");
+                    // 从枚举中随机获取一个房间类型
+                    Random random = new Random();
+                    RoomEntityType newRoomType = RoomEntityType.values()[random.nextInt(RoomEntityType.values().length)];
+                    updateRoom(newRoomType.name().toLowerCase(Locale.ROOT));
+                }, Duration.millis(1));
+            } else {
+                if (nowPlayer != null) {
+                    Room currentRoom = getCurrentRoom(roomName);
+                    if (currentRoom != null) {
+                        runOnce(() -> TalkScene.getInstance().show(TalkFactory.buildTalkList(List.of(currentRoom.getLongDescription()))), Duration.millis(1));
+                        nowPlayer.getPlace().add(roomName);
+                    }
+                }
+            }
+        });
+    }
+    public static void takeItem(String roomName, String itemName) throws NoSuchFieldException, IllegalAccessException {
+        String[] s = itemName.split(" ");
+        String temp = itemName;
+        if (s.length == 2) {
+            temp = s[0] + s[1].substring(0, 1).toUpperCase(Locale.ROOT) + s[1].substring(1);
         }
+
+        Field oriRoom = FXGLUtils.class.getDeclaredField(temp);
+        oriRoom.setAccessible(true);
+        Item item = (Item) oriRoom.get(FXGLUtils.class);
+
+        int totalWeight = getLoad() + item.getWeight();
+        if (totalWeight > nowPlayer.getPackWeight()) {
+            FXGL.getNotificationService().pushNotification("Your backpack is full");
+            return;
+        }
+
+        Map<String, Integer> itemsCount = roomItems.get(roomName);
+        if (itemsCount != null) {
+            Integer count = itemsCount.get(itemName);
+            if (count != null) {
+                itemsCount.put(itemName, count - 1);
+            }
+        }
+
+        nowPlayer.getItems().add(itemName);
     }
 }

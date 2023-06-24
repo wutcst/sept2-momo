@@ -1,9 +1,7 @@
 /**
  * Hall路由接口
  */
-package com.xf.woz.net.onmessage;
-
-import com.xf.woz.net.CmdModule;
+package com.xf.woz.net.onMessage.hallAndCmd;
 
 public interface HallCmd {
     int CMD = CmdModule.HALL_ACTION;

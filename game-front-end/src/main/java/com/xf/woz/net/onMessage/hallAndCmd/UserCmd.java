@@ -1,9 +1,7 @@
 /**
  * 玩家操作路由记录接口
  */
-package com.xf.woz.net.onmessage;
-
-import com.xf.woz.net.CmdModule;
+package com.xf.woz.net.onMessage.hallAndCmd;
 
 public interface UserCmd {
     int CMD = CmdModule.USER_ACTION;

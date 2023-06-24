@@ -71,7 +71,28 @@ public class WorldOfZuulApp extends GameApplication {
             log.error(e.getMessage(), e);
         }
     }
+    @Override
+    protected void onUpdate(double tpf) {
+        if (player != null) {
+            player.setPosX(playerEntity.getX());
+            player.setPosY(playerEntity.getY());
+            UserWebsocketClient.me().updatePlayer(player, null);
+        }
+    }
 
+    @Override
+    protected void initPhysics() {
+        // 这里添加物理碰撞的逻辑
+    }
+
+    @Override
+    protected void initInput() {
+        // 这里添加键盘输入的逻辑
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
     @Override
     protected void onPreInit() {
         // 设置背景音乐
@@ -361,26 +382,5 @@ public class WorldOfZuulApp extends GameApplication {
         addUINode(items, 0, 80 * 7 + 30);
     }
 
-    @Override
-    protected void onUpdate(double tpf) {
-        if (player != null) {
-            player.setPosX(playerEntity.getX());
-            player.setPosY(playerEntity.getY());
-            UserWebsocketClient.me().updatePlayer(player, null);
-        }
-    }
 
-    @Override
-    protected void initPhysics() {
-        // 这里添加物理碰撞的逻辑
-    }
-
-    @Override
-    protected void initInput() {
-        // 这里添加键盘输入的逻辑
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }

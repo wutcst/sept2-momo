@@ -10,7 +10,7 @@
 package com.xf.woz.components;
 
 import com.almasb.fxgl.entity.component.Component;
-import com.xf.woz.net.onmessage.*;
+import com.xf.woz.net.onMessage.*;
 import com.xf.woz.pojo.Player;
 import com.xf.woz.protoBuf.Command;
 
