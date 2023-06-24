@@ -1,20 +1,20 @@
 /**
-
- @description : [通用的WebSocket客户端]
- @author : [肖峰]
- @version : [v1.0]
- @createTime : [2022-12-20 13:57]
- @updateUser : [张忠瑾]
- @updateTime : [2023-6-23 22:56]
- @updateRemark : [说明本次修改内容]
+ * @description : [通用的WebSocket客户端]
+ * @author : [肖峰]
+ * @version : [v1.0]
+ * @createTime : [2022-12-20 13:57]
+ * @updateUser : [张忠瑾]
+ * @updateTime : [2023-6-23 22:56]
+ * @updateRemark : [说明本次修改内容]
  */
 package com.xf.woz.net;
+
 import com.iohao.game.action.skeleton.core.CmdKit;
 import com.iohao.game.action.skeleton.core.DataCodecKit;
 import com.iohao.game.bolt.broker.client.external.bootstrap.message.ExternalMessage;
 import com.iohao.game.common.kit.RandomKit;
 import com.iohao.game.common.kit.StrKit;
-import com.xf.woz.net.onmessage.*;
+import com.xf.woz.net.onMessage.*;
 import com.xf.woz.protoBuf.LoginVerify;
 import com.xf.woz.util.GameConfig;
 import com.xf.woz.util.WOZConfig;
@@ -34,7 +34,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public class UserWebsocketClient {
 
-    Copy code
     WebSocketClient webSocketClient;
 
     final Map<Integer, UserOnMessage> onMessageMap = new ConcurrentHashMap<>();
