@@ -24,11 +24,10 @@ public class WebSocketClientTest {
 
         connectReq.setMsg("jack");
         String s = JSONUtil.toJsonStr(connectReq);
-        ExternalMessage externalMessage = ExternalKit
-                // 路由、子路由、业务数据
+        ExternalMessage externalMessage = ExternalKit// 路由、子路由、业务数据  
                 .createExternalMessage(cmd, subCmd, connectReq);
         System.out.println(externalMessage);
-//        System.out.println("CommentWebSocketClient.onOpen");
-        // 游戏框架内置的协议， 与游戏前端相互通信的协议
+//        System.out.println("CommentWebSocketClient.onOpen");// 游戏框架内置的协议， 与游戏前端相互通信的协议
+        
     }
 }
