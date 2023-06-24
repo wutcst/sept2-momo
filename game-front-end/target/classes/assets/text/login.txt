@@ -1,3 +1,5 @@
 p1.name=Server
+
 p1.image=server.png
+
 p1:Welcome! Please login to the server~
