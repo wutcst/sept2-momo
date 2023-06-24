@@ -1,6 +1,11 @@
 # 忽略以下目录中的所有子目录及文件
-/target/*
+/out/*
 /.idea/*
+/target/*
+/game-front-end/target/*
+/game-server/target/*
+/system/*
+/logs/*
 
 # 忽略以下文件
 *.iml

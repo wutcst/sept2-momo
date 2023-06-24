@@ -1,0 +1,111 @@
+use woz
+
+db.createCollection("player")
+db.player.insertMany([
+    {
+        name: 'jack',
+        pwd: '123456',
+        place: ['outside', 'lab', 'magic', 'office'],
+        items: [],
+        packWeight: 5
+    },
+    {
+        name: 'qwe',
+        pwd: '123456',
+        place: ['outside', 'magic', 'lab', 'office'],
+        items: [],
+        packWeight: 5
+    },
+])
+
+db.createCollection("item")
+
+db.item.insertMany(
+    [{
+        name: 'apple',
+        description: 'Restore 50 degree of satiety after eating, and increase 5 maximum degree of satiety when satiety is full.',
+        weight: 1
+    }, {
+        name: 'big apple',
+        description: 'Restore 100 degree of satiety after eating, and increase 10 maximum degree of satiety when satiety is full.',
+        weight: 2
+    },
+        {
+            name: 'alcoholic chocolate',
+            description: 'Restores 20 satiety after eating, and increases experience by 800 if eaten by Adventure members.',
+            weight: 1
+        },
+        {
+            name: 'magic cookie',
+            description: 'Increases the player\'s load capacity.',
+            weight: 1
+        }]
+    )
+
+db.createCollection("room")
+db.room.insertMany(
+    [
+        {
+            name: 'lab',
+            items: ['apple', 'apple', 'apple',
+                'apple', 'apple', 'apple',
+                'apple', 'apple', 'alcoholic chocolate'],
+            description: 'in a computing lab',
+            east: 'office',
+            west: '',
+            north: 'outside',
+            south: '',
+        }, {
+        name: 'magic',
+        items: ['apple', 'apple', 'apple',
+            'apple', 'apple', 'apple',
+            'apple', 'apple', 'alcoholic chocolate'],
+        description: 'teleport you to a random room',
+        east: 'lab',
+        west: '',
+        north: 'pub',
+        south: '',
+    }, {
+        name: 'office',
+        items: ['magic cookie', 'apple', 'apple', 'apple',
+            'apple', 'apple', 'apple',
+            'apple', 'apple', 'alcoholic chocolate'],
+        description: 'in the computing admin office',
+        east: '',
+        west: 'lab',
+        north: 'theater',
+        south: '',
+    }, {
+        name: 'outside',
+        items: ['apple', 'apple', 'apple',
+            'apple', 'apple', 'apple',
+            'apple', 'apple', 'alcoholic chocolate'],
+        description: 'outside the main entrance of the university',
+        east: 'theater',
+        west: 'pub',
+        north: '',
+        south: 'lab',
+    }, {
+        name: 'pub',
+        items: ['apple', 'apple', 'apple',
+            'apple', 'apple', 'apple',
+            'apple', 'apple', 'alcoholic chocolate'],
+        description: 'in the campus pub',
+        east: 'office',
+        west: '',
+        north: '',
+        south: '',
+    }, {
+        name: 'theater',
+        items: ['apple', 'apple', 'apple',
+            'apple', 'apple', 'apple',
+            'apple', 'apple', 'alcoholic chocolate'],
+        description: 'in a lecture theater',
+        east: '',
+        west: 'outside',
+        north: '',
+        south: 'office',
+    }
+    ]
+    )
+
