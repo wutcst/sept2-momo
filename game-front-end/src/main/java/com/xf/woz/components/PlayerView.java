@@ -25,8 +25,7 @@ public class PlayerView extends Component {
         onMessageMap.put("go", () -> GoOnMessage.me().request("go"));
         onMessageMap.put("userLoginVerify", () -> UserLoginVerifyOnMessage.me().request("userLoginVerify"));
         onMessageMap.put("help", () -> HelpOnMessage.me().request("help"));
-        //items,look,quit,take,drop,back
-        onMessageMap.put("items", () -> ItemsOnMessage.me().request("items"));
+        onMessageMap.put("items", () -> ItemsOnMessage.me().request(new Command("items", null)));
         onMessageMap.put("look", () -> LookOnMessage.me().request("look"));
         onMessageMap.put("quit", () -> QuitOnMessage.me().request("quit"));
         onMessageMap.put("take", () -> TakeOnMessage.me().request("take"));
@@ -34,16 +33,19 @@ public class PlayerView extends Component {
         onMessageMap.put("back", () -> BackOnMessage.me().request("back"));
     }
 
-
     public void login(Player player) {
         UserLoginVerifyOnMessage.me().request(player);
     }
 
     public void command(String firstCommand) {
-        onMessageMap.get(firstCommand).run();
+        if (onMessageMap.containsKey(firstCommand)) {
+            onMessageMap.get(firstCommand).run();
+        } else {
+            System.out.println("Invalid command!");
+        }
     }
 
-    public void items(){
-        ItemsOnMessage.me().request(new Command("items",null));
+    public void items() {
+        ItemsOnMessage.me().request(new Command("items", null));
     }
 }

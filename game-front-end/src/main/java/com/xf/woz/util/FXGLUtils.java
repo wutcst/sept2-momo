@@ -1,11 +1,11 @@
 /**
  * @description : [实现游戏各种功能]
  * @author : [肖峰]
- * @version : [v1.0]
+ * @version : [v1.1]
  * @createTime : [2022-12-23 20:36]
  * @updateUser : [肖峰]
- * @updateTime : [2022-12-23 20:36]
- * @updateRemark : [说明本次修改内容]
+ * @updateTime : [2023-06-24 10:00]
+ * @updateRemark : [修改了部分方法实现]
  */
 package com.xf.woz.util;
 
@@ -84,44 +84,31 @@ public class FXGLUtils {
     }
 
     public static void updateRoom(String roomName) {
-        Platform.runLater(
-                () -> {
-                    RoomEntityType roomType = RoomFactory.roomMap.get(roomName);
-                    getGameWorld().addEntity(Objects.requireNonNull(RoomFactory.createEntity(roomType)));
-                    if (roomType == RoomEntityType.MAGIC) {
-                        List<String> magicRoomTalks = List.of("This is a magic room.",
-                                "You are teleported to a random room");
-                        List<Talk> talks = TalkFactory.buildTalkList(magicRoomTalks);
-                        runOnce(() -> {
-                            TalkScene.getInstance().show(talks);
-                            //从枚举中随机获取一个房间类型
-                            Random random = new Random();
-                            RoomEntityType newRoomType = RoomEntityType.values()[random.nextInt(RoomEntityType.values().length)];
-                            updateRoom(newRoomType.name().toLowerCase(Locale.ROOT));
+        Platform.runLater(() -> {
+            RoomEntityType roomType = RoomFactory.roomMap.get(roomName);
+            getGameWorld().addEntity(Objects.requireNonNull(RoomFactory.createEntity(roomType)));
+            if (roomType == RoomEntityType.MAGIC) {
+                List<String> magicRoomTalks = List.of("This is a magic room.",
+                        "You are teleported to a random room");
+                List<Talk> talks = TalkFactory.buildTalkList(magicRoomTalks);
+                runOnce(() -> {
+                    TalkScene.getInstance().show(talks);
+                    //从枚举中随机获取一个房间类型
+                    Random random = new Random();
+                    RoomEntityType newRoomType = RoomEntityType.values()[random.nextInt(RoomEntityType.values().length)];
+                    updateRoom(newRoomType.name().toLowerCase(Locale.ROOT));
 
-                        }, Duration.millis(1));
-                    } else {
-                        if (nowPlayer != null) {
-                            Field oriRoom = null;
-                            try {
-                                oriRoom = FXGLUtils.class.getDeclaredField(roomName);
-                            } catch (NoSuchFieldException e) {
-                                e.printStackTrace();
-                            }
-                            Room o = null;
-                            try {
-                                o = (Room) oriRoom.get(null);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-                            Room finalO = o;
-                            runOnce(() -> TalkScene.getInstance().show(TalkFactory.buildTalkList(List.of(finalO.getLongDescription())))
-                                    , Duration.millis(1));
-                            nowPlayer.getPlace().add(roomName);
-                        }
-
+                }, Duration.millis(1));
+            } else {
+                if (nowPlayer != null) {
+                    Room currentRoom = getCurrentRoom(roomName);
+                    if (currentRoom != null) {
+                        runOnce(() -> TalkScene.getInstance().show(TalkFactory.buildTalkList(List.of(currentRoom.getLongDescription()))), Duration.millis(1));
+                        nowPlayer.getPlace().add(roomName);
                     }
-                });
+                }
+            }
+        });
     }
 
     public static void backRoom() {
@@ -218,17 +205,18 @@ public class FXGLUtils {
         }
     }
 
-
     public static void updateAllRoom() {
         String[] rooms = new String[]{"outside", "pub", "lab", "office", "theater"};
         for (int i = 0; i < rooms.length; i++) {
-//            ArrayList<String> itemNames = new ArrayList<>(roomItems.get(rooms[i]).keySet());
             List<String> items = new ArrayList<>();
-            Set<Map.Entry<String, Integer>> entries = roomItems.get(rooms[i]).entrySet();
-            for (Map.Entry<String, Integer> entry : entries) {
-                Integer value = entry.getValue();
-                for (int integer = 0; integer < value; integer++) {
-                    items.add(entry.getKey());
+            Map<String, Integer> itemsCount = roomItems.get(rooms[i]);
+            if (itemsCount != null) {
+                for (Map.Entry<String, Integer> entry : itemsCount.entrySet()) {
+                    String item = entry.getKey();
+                    Integer count = entry.getValue();
+                    for (int integer = 0; integer < count; integer++) {
+                        items.add(item);
+                    }
                 }
             }
             RoomProtoBuf roomProtoBuf = new RoomProtoBuf(rooms[i], items);
@@ -236,10 +224,9 @@ public class FXGLUtils {
         }
     }
 
-    public static void useMagicCookie(){
+    public static void useMagicCookie() {
         FXGLUtils.nowPlayer.getItems().remove("magic cookie");
         FXGLUtils.nowPlayer.setPackWeight(FXGLUtils.nowPlayer.getPackWeight() + 1);
-        FXGL.getNotificationService().pushNotification("You have used magic cookie, your packweight + 1");
+        FXGL.getNotificationService().pushNotification("You have used a magic cookie, your packweight + 1");
     }
 }
-
