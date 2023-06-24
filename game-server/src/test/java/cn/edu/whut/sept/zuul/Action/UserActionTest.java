@@ -38,30 +38,34 @@ import java.util.Objectublic class UserActionTest {
         assert Objects.equals(player1.getItems(), player.getItems());
     }ublic class UserActionTest {
     @Test
-    public void updatePlayerTest() {
-        UserAction userAction = new UserAction();
-        Player player = new Player();
-        player.setPwd("123456");
-        player.setName("jack");
-        Player player1 = userAction.updatePlayer(player, null);
-        assert Objects.equals(player1.getName(), player.getName());
-        assert Objects.equals(player1.getItems(), player.getItems());
+    publirt org.junit.Test;
 
-    }
+import java.util.List;
 
+public class ConnectActionTest {
     @Test
-    public void playerLogintest1() {
-        UserAction userAction = new UserAction();
-        Player player = new Player();
-        player.setPwd("123456");
-        player.setName("jack");
-        Player player1 = userAction.login(player, null);
-        assert Objects.equals(player1.getName(), player.getName());
-        assert Objects.equals(player1.getItems(), player.getItems());
-    }ublic class UserActionTest {
+    public void updateAllRoomTest(){
+        ConnectAction connectAction = new ConnectAction();
+        RoomProtoBuf roomProtoBuf = new RoomProtoBuf();
+        roomProtoBuf.setName("pub");
+        roomProtoBuf.setItems(List.of("magic cookie","apple","apple","apple","apple","apple","apple","apple","apple","apple", "alcoholic chocolate"));
+        RoomProtoBuf roomProtoBuf1 = connectAction.updateAllRoom(roomProtoBuf, null);
+        assert roomProtoBuf1.getItems().get(0).equals("magic cookie"); */
+package cn.edu.whut.sept.zuul.Action;
+
+import cn.edu.whut.sept.zuul.action.ConnectAction;
+import cn.edu.whut.sept.zuul.protoBuf.RoomProtoBuf;
+import org.junit.Test;
+
+import java.util.List;
+
+public class ConnectActionTest {
     @Test
-    public void updatePlayerTest() {
-        UserAction userAction = new UserAction();
+    public void updateAllRoomTest(){
+        ConnectAction connectAction = new ConnectAction();
+        RoomProtoBuf roomProtoBuf = new RoomProtoBuf();
+        roomProtoBuf.setName("pub");
+        roomProtoBuf.setItems(List.of("magic 
         Player player = new Player();
         player.setPwd("123456");
         player.setName("jack");
