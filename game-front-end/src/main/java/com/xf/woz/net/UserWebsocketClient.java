@@ -3,8 +3,8 @@
  * @author : [肖峰]
  * @version : [v1.0]
  * @createTime : [2022-12-20 13:57]
- * @updateUser : [肖峰]
- * @updateTime : [2022-12-20 13:57]
+ * @updateUser : [张忠瑾]
+ * @updateTime : [2023-6-23 22:56]
  * @updateRemark : [说明本次修改内容]
  */
 package com.xf.woz.net;
@@ -14,7 +14,7 @@ import com.iohao.game.action.skeleton.core.DataCodecKit;
 import com.iohao.game.bolt.broker.client.external.bootstrap.message.ExternalMessage;
 import com.iohao.game.common.kit.RandomKit;
 import com.iohao.game.common.kit.StrKit;
-import com.xf.woz.net.onmessage.*;
+import com.xf.woz.net.onMessage.*;
 import com.xf.woz.protoBuf.LoginVerify;
 import com.xf.woz.util.GameConfig;
 import com.xf.woz.util.WOZConfig;
@@ -69,16 +69,16 @@ public class UserWebsocketClient {
         this.init();
         // 开始连接服务器
         webSocketClient.connect();
-        int externalPort = WOZConfig.externalPort;
-        String ip = WOZConfig.externalIp;
+        int externalPort = WOZConfig.getExternalPort();  // Modified
+        String ip = WOZConfig.getExternalIp();  // Modified
         log.info("start ws://{}:{}/websocket", ip, externalPort);
     }
 
     private void init() throws Exception {
-        int externalPort = WOZConfig.externalPort;
-        String ip = WOZConfig.externalIp;
+        int externalPort = WOZConfig.getExternalPort();  // Modified
+        String ip = WOZConfig.getExternalIp();  // Modified
 
-        var url = "ws://{}:{}" + GameConfig.websocketPath;
+        var url = "ws://{}:{}" + GameConfig.getWebsocketPath();  // Modified
 
         var wsUrl = StrKit.format(url, ip, externalPort);
         log.info("ws url : {}", wsUrl);
@@ -89,7 +89,7 @@ public class UserWebsocketClient {
                 LoginVerify loginVerify = new LoginVerify();
                 loginVerify.jwt = "jwt-" + RandomKit.randomInt(10000);
 
-                ConnectOnMessage.me().request(loginVerify,()->log.info("Connecting to the server succeeded"));
+                ConnectOnMessage.me().request(loginVerify, () -> log.info("Connecting to the server succeeded"));
             }
 
             @Override
@@ -155,14 +155,14 @@ public class UserWebsocketClient {
 
     }
 
-    public static UserWebsocketClient me() {
-        return Holder.ME;
+    public static UserWebsocketClient getInstance() {  // Modified
+        return Holder.INSTANCE;
     }
 
     /**
      * 通过 JVM 的类加载机制, 保证只加载一次 (singleton)
      */
     private static class Holder {
-        static final UserWebsocketClient ME = new UserWebsocketClient();
+        static final UserWebsocketClient INSTANCE = new UserWebsocketClient();  // Modified
     }
 }

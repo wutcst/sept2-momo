@@ -9,9 +9,9 @@
  */
 package com.xf.woz.net;
 
-import com.xf.woz.net.onmessage.UpdateAllRoomOnMessage;
-import com.xf.woz.net.onmessage.UpdatePlayerOnMessage;
-import com.xf.woz.net.onmessage.UserLoginVerifyOnMessage;
+import com.xf.woz.net.onMessage.UpdateAllRoomOnMessage;
+import com.xf.woz.net.onMessage.UpdatePlayerOnMessage;
+import com.xf.woz.net.onMessage.UserLoginVerifyOnMessage;
 import com.xf.woz.pojo.Player;
 import com.xf.woz.util.FXGLUtils;
 import org.junit.Test;

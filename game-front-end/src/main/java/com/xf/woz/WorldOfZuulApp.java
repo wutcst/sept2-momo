@@ -1,6 +1,6 @@
 /*
 游戏启动类
- */
+*/
 package com.xf.woz;
 
 import com.almasb.fxgl.app.GameApplication;
@@ -34,10 +34,11 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getCutsceneService;
 
 /**
- * @author Alexander
+ * 游戏启动类
  */
 @Slf4j
 public class WorldOfZuulApp extends GameApplication {
+
     private Entity playerEntity = null;
     private Player player = null;
     private PlayerView playerView;
@@ -51,8 +52,6 @@ public class WorldOfZuulApp extends GameApplication {
         vars.put("lab", List.of("north", "west", "east"));
         vars.put("office", List.of("west"));
         vars.put("theater", List.of("west"));
-
-
     }
 
     @Override
@@ -64,21 +63,40 @@ public class WorldOfZuulApp extends GameApplication {
         settings.setAppIcon("icon.png");
         settings.getSupportedLanguages().add(Language.CHINESE);
         settings.setDefaultLanguage(Language.CHINESE);
-        //菜单
         settings.setMainMenuEnabled(true);
+
         try {
             UserWebsocketClient.me().start();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-//        settings.setSceneFactory();
+    }
+    @Override
+    protected void onUpdate(double tpf) {
+        if (player != null) {
+            player.setPosX(playerEntity.getX());
+            player.setPosY(playerEntity.getY());
+            UserWebsocketClient.me().updatePlayer(player, null);
+        }
     }
 
     @Override
-    protected void onPreInit() {
+    protected void initPhysics() {
+        // 这里添加物理碰撞的逻辑
+    }
 
-        //设置背景图
-//        FXGL.loopBGM("BGM_677.mp3");
+    @Override
+    protected void initInput() {
+        // 这里添加键盘输入的逻辑
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+    @Override
+    protected void onPreInit() {
+        // 设置背景音乐
+        FXGL.loopBGM("BGM_677.mp3");
     }
 
     @Override
@@ -87,29 +105,46 @@ public class WorldOfZuulApp extends GameApplication {
         getGameWorld().addEntity(Objects.requireNonNull(RoomFactory.createEntity(RoomEntityType.OUTSIDE)));
         playerEntity = spawn("player");
         playerEntity.addComponent(new PlayerView());
-//        spawn("outside");
-
 
         FXGL.runOnce(() -> {
             List<String> lines = getAssetLoader().loadText("login.txt");
             Cutscene cutscene = new Cutscene(lines);
             getCutsceneService().startCutscene(cutscene, () -> {
-                        getDialogService().showInputBox("请输入用户名",
-                                username -> {
-                                    getDialogService().showInputBox("请输入密码来登录游戏(用户名不存在则自动注册)",
-                                            password -> {
-                                                this.player = new Player();
-                                                this.player.setName(username);
-                                                this.player.setPwd(password);
-                                                playerView = playerEntity.getComponent(PlayerView.class);
-                                                playerView.login(player);
-                                            });
-                                });
-                    }
-            );
-        }, Duration.ONE);
+                getDialogService().showInputBox("请输入用户名", username -> {
+                    getDialogService().showInputBox("请输入密码来登录游戏", password -> {
+                        UserWebsocketClient.me().login(username, password, result -> {
+                            Platform.runLater(() -> {
+                                if (result.isSuccess()) {
+                                    player = result.getData();
+                                    if (player.getHeadImage() != null) {
+                                        Image headImage = new Image(player.getHeadImage());
+                                        Rectangle clip = new Rectangle(96, 96);
+                                        clip.setArcWidth(10);
+                                        clip.setArcHeight(10);
+                                        headImageProperty().setValue(new ImagePattern(headImage));
+                                    }
+                                    showProfile(player);
+                                } else {
+                                    getDialogService().showMessageBox("登录失败：" + result.getMessage());
+                                }
+                            });
+                        });
+                    });
+                });
+            });
+        }, Duration.seconds(1));
+    }
 
+    private void showProfile(Player player) {
+        StackPane profilePane = new StackPane();
+        profilePane.setPrefSize(300, 400);
+        profilePane.getStyleClass().add("profile-pane");
 
+        Text nameLabel = new Text(player.getName());
+        nameLabel.getStyleClass().add("profile-name");
+
+        profilePane.getChildren().add(nameLabel);
+        getGameScene().addUINode(profilePane, 100, 100);
     }
 
     @Override
@@ -345,22 +380,7 @@ public class WorldOfZuulApp extends GameApplication {
             TalkScene.getInstance().show(talks5);
         });
         addUINode(items, 0, 80 * 7 + 30);
-
-
     }
 
-    @Override
-    protected void onUpdate(double tpf) {
-        super.onUpdate(tpf);
-//        if (player != null) {
-//            player = FXGLUtils.nowPlayer;
-//            List<String> track = player.getPlace();
-//            List<String> lastPlace = track.subList(track.size() - 1, track.size());
-//            nowPlace = lastPlace.get(0);
-//        }
-    }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 }

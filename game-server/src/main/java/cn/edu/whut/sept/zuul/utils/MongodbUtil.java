@@ -3,8 +3,10 @@
  * @author : [肖峰]
  * @version : [v1.0]
  * @createTime : [2022-12-19 23:17]
- * @updateUser : [肖峰]
- * @updateTime : [2022-12-19 23:17]
+
+ * @updateUser : [张忠瑾]
+ * @updateTime : [2023-6-23 23:00]
+
  * @updateRemark : [说明本次修改内容]
  */
 package cn.edu.whut.sept.zuul.utils;
@@ -91,11 +93,13 @@ public enum MongodbUtil {
      * @return
      */
     public MongoDatabase getDB(String dbName) {
+
         if (dbName != null && !"".equals(dbName)) {
             MongoDatabase database = mongoClient.getDatabase(dbName);
             return database;
         }
         return null;
+
     }
 
     /**
@@ -105,6 +109,7 @@ public enum MongodbUtil {
      * @return
      */
     public MongoCollection<Document> getCollection(String dbName, String collName) {
+
         if (null == collName || "".equals(collName)) {
             return null;
         }
@@ -113,13 +118,16 @@ public enum MongodbUtil {
         }
         MongoCollection<Document> collection = mongoClient.getDatabase(dbName).getCollection(collName);
         return collection;
+
     }
 
     /**
      * 查询DB下的所有表名
      */
     public List<String> getAllCollections(String dbName) {
+
         MongoIterable<String> colls = getDB(dbName).listCollectionNames();
+
         List<String> _list = new ArrayList<String>();
         for (String s : colls) {
             _list.add(s);
@@ -133,9 +141,11 @@ public enum MongodbUtil {
      * @return
      */
     public MongoIterable<String> getAllDBNames() {
+
         MongoIterable<String> s = mongoClient.listDatabaseNames();
         return s;
     }
+
 
     /**
      * 删除一个数据库
@@ -152,10 +162,12 @@ public enum MongodbUtil {
      * @return
      */
     public Document findById(MongoCollection<Document> coll, String id) {
+
         ObjectId _idobj = null;
         try {
             _idobj = new ObjectId(id);
         } catch (Exception e) {
+
             return null;
         }
         return coll.find(Filters.eq("_id", _idobj)).first();
@@ -165,16 +177,20 @@ public enum MongodbUtil {
      * 统计数
      */
     public int getCount(MongoCollection<Document> coll) {
+
         int count = (int) coll.count();
         return count;
+
     }
 
     /**
      * 插入文档
      */
     public void insertOne(String dbName, String collName, Document doc) {
+
         MongoDatabase db = getDB(dbName);
         db.getCollection(collName).insertOne(doc);
+
     }
 
     /**
@@ -201,10 +217,12 @@ public enum MongodbUtil {
      */
     public int deleteById(MongoCollection<Document> coll, String id) {
         int count = 0;
+
         ObjectId _id = null;
         try {
             _id = new ObjectId(id);
         } catch (Exception e) {
+
             return 0;
         }
         Bson filter = Filters.eq("_id", _id);
@@ -220,6 +238,7 @@ public enum MongodbUtil {
      * @return
      */
     public Document updateById(MongoCollection<Document> coll, String id, Document newdoc) {
+
         ObjectId _idobj = null;
         try {
             _idobj = new ObjectId(id);
@@ -228,6 +247,7 @@ public enum MongodbUtil {
         }
         Bson filter = Filters.eq("_id", _idobj);
         // coll.replaceOne(filter, newdoc); // 完全替代
+
         coll.updateOne(filter, new Document("$set", newdoc));
         return newdoc;
     }
