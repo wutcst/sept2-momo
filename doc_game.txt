@@ -1,0 +1,36 @@
+==================== 游戏文档格式说明 ====================
+https://www.yuque.com/iohao/game/irth38#cJLdC
+
+==================== ConnectAction  ====================
+路由: 1 - 0  --- 【】 --- 【ConnectAction:1】【connectVerify】
+    方法参数: cn.edu.whut.sept.zuul.protoBuf.ConnectVerify
+    方法返回值: cn.edu.whut.sept.zuul.protoBuf.ConnectVerify
+ 
+路由: 1 - 2  --- 【】 --- 【ConnectAction:1】【updateAllRoom】
+    方法参数: cn.edu.whut.sept.zuul.protoBuf.RoomProtoBuf
+    方法返回值: cn.edu.whut.sept.zuul.protoBuf.RoomProtoBuf
+ 
+
+==================== UserAction  ====================
+路由: 2 - 0  --- 【】 --- 【UserAction:1】【login】
+    方法参数: cn.edu.whut.sept.zuul.entity.Player
+    方法返回值: cn.edu.whut.sept.zuul.entity.Player
+ 
+路由: 2 - 5  --- 【】 --- 【UserAction:1】【getRoomItem】
+    方法参数: cn.edu.whut.sept.zuul.protoBuf.RoomProtoBuf
+    方法返回值: cn.edu.whut.sept.zuul.protoBuf.RoomProtoBuf
+ 
+路由: 2 - 9  --- 【】 --- 【UserAction:1】【updatePlayer】
+    方法参数: cn.edu.whut.sept.zuul.entity.Player
+    方法返回值: cn.edu.whut.sept.zuul.entity.Player
+ 
+
+==================== 错误码 ====================
+ -1007 : 强制玩家下线 
+ -1006 : 数据不存在 
+ -1005 : class 不存在 
+ -1004 : 请先登录 
+ -1003 : 心跳超时相关 
+ -1002 : 路由错误 
+ -1001 : 参数验错误 
+ -1000 : 系统其它错误 
